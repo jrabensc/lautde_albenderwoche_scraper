@@ -63,11 +63,25 @@ review_data <- do.call(rbind, review_list)
 
 # merge -------------------------------------------------------------------
 
-complete_data <- complete_data %>% 
+complete_data_raw <- complete_data %>% 
   left_join(review_data, by = "album_title")
 
+# checks ------------------------------------------------------------------
+
+# get all lines containing >= 1 NA
+
+missings <- complete_data_raw %>% filter_all(any_vars(is.na(.)))
+
+# get all lines containing empty strings
+
+empty <- complete_data_raw %>% filter_all(any_vars(. == ""))
+
+# cleaning ----------------------------------------------------------------
+
+# set empty strings to NA
+
+complete_data <- complete_data_raw %>% na_if("")
 
 # save and export ---------------------------------------------------------
 
-saveRDS(complete_data, "alben_der_woche.Rda")
-write.csv(complete_data, "alben_der_woche.csv")
+write.csv(complete_data, "data/alben_der_woche.csv", row.names = FALSE)
