@@ -50,7 +50,7 @@ scrape_review_site <- function(url){
   album_publisher <- page_html %>% 
     xml2::xml_find_all("//span[contains(@class, 'info')]") %>% 
     rvest::html_text() %>% 
-    str_extract("\\(([^\\)]+)\\)") %>% #tbd: some publishers names contains parenthesis, regex should be changed accordingly
+    str_extract("\\(([^\\)]+)\\)") %>% #TODO: some publisher names contains parenthesis, regex should be changed accordingly
     str_replace("\\(","") %>% 
     str_replace("\\)","")
   album_release_date <- page_html %>% 

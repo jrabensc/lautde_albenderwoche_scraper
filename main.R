@@ -10,8 +10,7 @@ source("r/fun.R")
 
 # load settings -----------------------------------------------------------
 
-source("r/settings.R")
-
+source("config/settings.R")
 
 # create df containing review urls ----------------------------------------
 
@@ -30,31 +29,37 @@ for (i in 1:number_pagination) {
 
 # initialize list
 
-page_list = list()
+page_list <- list()
 
 # call scrape_site function
 
 for (i in 1:number_pagination) {
   data <- scrape_site(i)
   page_list[[i]] <- data
+  cli::cli_alert_info("Scraped page {i}.")
+  if (i == number_pagination) {
+    cli::cli_alert_success("List of reviews sucessfully scraped.")
+  }
 }
 
 # list to df
 
 complete_data <- do.call(rbind, page_list)
 
-
-# scape review page -------------------------------------------------------
+# scrape review page -------------------------------------------------------
 
 # initialize list
 
-review_list = list()
+review_list <- list()
 
 # call scrape review function
 
 for (i in 1:nrow(complete_data)) {
   data <- scrape_review_site(complete_data$review_url[i])
   review_list[[i]] <- data
+  cli::cli_alert_info("Review {i} successfully scraped.")
+  if (i == nrow(complete_data))
+    cli::cli_alert_success("Successfully scraped {i} reviews.")
 }
 
 # list to df
